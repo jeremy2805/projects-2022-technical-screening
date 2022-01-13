@@ -31,8 +31,64 @@ var assert = require("assert")
 // Explanation: Empty array...
 
 const altNumbers = (numArray) => {
-    // TODO: COMPLETE THIS FUNCTION
-    return [];
+    //NOTE: THE REASON I THINK IT WOULD BE UNHEARD OF TO LOOP THROUGH INPUT AS YOU CREATE OUTPUT IS BECAUSE
+    //YOU NEED TO KNOW THE LENGTH OF THE POSITIVE AND NEGATIVE NUMBERS TO DETERMINE WHICH VALUE GOES FIRST
+    const pos = [];
+    const neg = [];
+    for (var i = 0, len = numArray.length; i < len; i++) {
+        //neg
+        let val = numArray[i];
+        if (val < 0) {
+            neg.push(val);
+        }
+        //pos
+        else {
+            pos.push(val);
+        }
+    }
+    //the pos and neg are split but in order as of right now
+    let posLen = pos.length;
+    let negLen = neg.length;
+    let result = [];
+    //NOTE: ONLY NEED TO ADD ONE MORE ELEMENT TO THE RESULT AFTER LOOPS FOR FIRST 2 CASES SINCE WE KNOW
+    //POSITIVE AND NEGATIVE ONLY DIFFER BY 1.
+    // more positive values then negative, so positive goes first
+    if (posLen > negLen) {
+        //use neg length and then add one more from positive
+        let i = 0;
+        while (i < negLen) {
+            result.push(pos.at(i));
+            result.push(neg.at(i))
+            i++;
+        }
+        //last element of the positive list
+        result.push(pos.at(i));
+    }
+
+    // negatives goes first, since there are more negativesS
+    else if (posLen < negLen) {
+        //use pos length then add one more from negative
+        let i = 0;
+        while (i < posLen) {
+            result.push(neg.at(i));
+            result.push(pos.at(i))
+            i++;
+        }
+        //last element of the positive list
+        result.push(neg.at(i));
+        
+    }
+    //seperated this case, was going to put in else if because the code will look much cleaner then
+    //posLen == negLen
+    else {
+        let i = 0;
+        while (i < posLen) {
+            result.push(neg.at(i));
+            result.push(pos.at(i))
+            i++;
+        }
+    }
+    return result;
 }
 
 module.exports = { altNumbers } // Do not modify this line
