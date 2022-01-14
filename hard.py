@@ -17,6 +17,7 @@ A good solution is favourable but does not guarantee a spot in Projects because
 we will also consider many other criteria.
 """
 import json
+from venv import create
 
 # NOTE: DO NOT EDIT conditions.json
 with open("./conditions.json") as f:
@@ -32,13 +33,30 @@ def is_unlocked(courses_list, target_course):
 
     You can assume all courses are worth 6 units of credit
     """
+    if target_course == "COMP1511":
+        return True
+    #might use a tree for calculating things, go thru recursive search since it is useful to do that
+    #for the AND / OR
+    course_completed = create_hashmap(courses_list)
+    tree = create_tree(CONDITIONS[target_course])
+    return recursive_search(tree, course_completed)
+
+def create_hashmap(courses_list):
+    dic = {}
+    for i, course in enumerate(courses_list):
+        dic[course] = i
+    return dic
+
+#goes through each condition of "the tree", and recursively go through them
+#note, recurse when there is a new () since it is a new group
+def recursive_search(conditions_tree, courses_completed):
+    #conditions passed through
+    pass
     
-    # TODO: COMPLETE THIS FUNCTION!!!
+    #seperate by word Or/And
     
-    return True
-
-
-
-
+def create_tree(conditions):
+    pass
+#TODO: create a condition tree based on what has been inputted and then use that in recursive search
 
     
