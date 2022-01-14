@@ -17,6 +17,7 @@ A good solution is favourable but does not guarantee a spot in Projects because
 we will also consider many other criteria.
 """
 import json
+from condition import *
 from venv import create
 
 # NOTE: DO NOT EDIT conditions.json
@@ -55,8 +56,35 @@ def recursive_search(conditions_tree, courses_completed):
     
     #seperate by word Or/And
     
-def create_tree(conditions):
-    pass
+def create_tree(conditions: str):
+    #will be a tree such as COMP1511 OR COMP2521 OR ETC...
+    
+    #first put to lower case
+    conditions = conditions.lower()
+    
+    #EXAMPLE WILL BE LIKE: comp1511 or comp2521 or etc....
+    conditionList = conditions.split()
+    #EXAMPLE: comp1511,or,comp2521,or,comp31
+    #now must check if is an AND or an OR
+    openBrackets = 0
+    closedBrackets = 0
+    #first step, find the first word ie and/or and it will tell you if it is AND or OR condition in first nest
+    if first_word == "or":
+        head = ORcondition
+    else:
+        head = ANDcondition
+    #then rope all the words that are not in brackets and put them in the or condition
+    #NOTE count the amount of open and unopened brackets to determine when the brackets stop and start
+    #then delete all the words, bar the ones that existed while /(/ != /)/
+    
+    #then delete the first openBracket and the last closedBracket
+    
+    #repeat the steps using a recursion 
+    
+    #return the head of the condition tree
+    return head
+    #NOTE: THINK ABOUT CASE IF THERE ARE 2 () () IN THE BEGINNING CONDITIONS STATEMENT
+    
 #TODO: create a condition tree based on what has been inputted and then use that in recursive search
 
     
