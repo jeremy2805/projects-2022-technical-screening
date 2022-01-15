@@ -19,6 +19,7 @@ we will also consider many other criteria.
 import json
 from condition import *
 from venv import create
+import re
 
 # NOTE: DO NOT EDIT conditions.json
 with open("./conditions.json") as f:
@@ -39,13 +40,22 @@ def is_unlocked(courses_list, target_course):
     #might use a tree for calculating things, go thru recursive search since it is useful to do that
     #for the AND / OR
     course_completed = create_hashmap(courses_list)
-    tree = create_tree(CONDITIONS[target_course])
+    #note start the tree off with an AND condition that will be the head and it will only be the one condition
+    #that is the beginning of the AND/OR tree
+    #WILL LOOK LIKE THIS 
+    #
+    #         AND
+    #          |
+    # EXAMPLE (OR) 
+    #         /  \
+    #        152  251
+    tree = ANDcondition(create_tree(CONDITIONS[target_course]))
     return recursive_search(tree, course_completed)
-
+#will be all lowercase
 def create_hashmap(courses_list):
     dic = {}
     for i, course in enumerate(courses_list):
-        dic[course] = i
+        dic[course.lower()] = i
     return dic
 
 #goes through each condition of "the tree", and recursively go through them
@@ -55,8 +65,8 @@ def recursive_search(conditions_tree, courses_completed):
     pass
     
     #seperate by word Or/And
-    
-def create_tree(conditions: str):
+
+def create_tree(conditions: str) -> condition:
     #will be a tree such as COMP1511 OR COMP2521 OR ETC...
     
     #first put to lower case
@@ -69,10 +79,50 @@ def create_tree(conditions: str):
     openBrackets = 0
     closedBrackets = 0
     #first step, find the first word ie and/or and it will tell you if it is AND or OR condition in first nest
-    if first_word == "or":
-        head = ORcondition
-    else:
-        head = ANDcondition
+    conditions_created = []
+    for word in conditionList:
+        #means it is the start of a recursive statement
+        #could use regex instead to just grab the string (PROB BETTER BET)
+        #but how to handle if bracket in bracket?
+        if "(" in word:
+            openBrackets += 1
+            #start from this moment and loop through again to see where it ends
+            #then remove it from the string
+            #etc..
+            #do logic later as it is tough
+            pass
+    #we now know that there are no substrings containing '(' or ')'
+    #thus must be final condition
+    #add the list of conditions created so far to this
+    
+    #add to list of conditions created
+    for word in conditionList:
+        #check each word to see if it is AND / OR
+        if word == "or":
+            head = ORcondition([])
+            break
+        elif word == "and":
+            head = ANDcondition([])
+            break
+    #now that we have created the head we can go in and make a new condition and add to head
+    head.addConditions(conditions_created)
+    #added the conditions that have been made so far (ones made thru recursion)
+    #now add all the ones from the word list
+    
+    #TODO: check for condition which is x amount of units done
+    for word in conditionList:
+        #is a comp condition
+        val = re.compile(r'[a-z]?{4,4}[\d]{4,4}').match(word)
+        if val is not None:
+            #no need to format
+            if "comp" in val:
+                head.addCondition(SPECIFICcondition(word))
+            else:
+                #need to add comp to front
+                head.addCondition(SPECIFICcondition("comp" + val))
+        #add the other requirement of NUMEROUScondition later
+            
+    
     #then rope all the words that are not in brackets and put them in the or condition
     #NOTE count the amount of open and unopened brackets to determine when the brackets stop and start
     #then delete all the words, bar the ones that existed while /(/ != /)/
