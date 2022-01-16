@@ -144,6 +144,13 @@ def create_tree(conditions: str) -> condition:
             #no need to format since it has prefix infront of it
             if  "comp" in val:
                 head.addCondition(SPECIFICcondition(val))
+                        #is just a number, make sure not last word so can index next
+            elif val.isdecimal() and i + 1 < length and conditionList[i + 1] == "unit":
+                #grab all the word which make sense and then do stuff
+                #make sure to check for level 1 or level 2, if not found
+                #default to all courses
+                pass
+                #use j to iterate then go on to i again
             else:
                 #need to add comp to front
                 head.addCondition(SPECIFICcondition("comp" + val))
