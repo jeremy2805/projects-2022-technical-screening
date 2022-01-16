@@ -129,22 +129,29 @@ def create_tree(conditions: str) -> condition:
     #added the conditions that have been made so far (ones made thru recursion)
     #now add all the ones from the word list
     #TODO: check for condition which is x amount of units done
-    for word in conditionList:
+    i = 0
+    length = len(conditionList)
+    while i < length:
+        word = conditionList[i]
         #is a comp condition
         #not good at regex....
         #wildcard at end because sometimes there is a .
+        #for some reason matches all numbers too?
         val = re.compile(r'[a-z]?[a-z]?[a-z]?[a-z]?[\d][\d][\d][\d]*').match(word)
         if val is not None:
             val = val.group()
-            print(val)
+            print(f"condition made with {val}")
             #no need to format since it has prefix infront of it
-            if  len(val) > 4:
+            if  "comp" in val:
                 head.addCondition(SPECIFICcondition(val))
             else:
                 #need to add comp to front
                 head.addCondition(SPECIFICcondition("comp" + val))
         #TODO add the other requirement of NUMEROUScondition later
-            
+        #match number to see if 
+        #then grab all the words possible
+        i += 1
+               
     return head
 
     

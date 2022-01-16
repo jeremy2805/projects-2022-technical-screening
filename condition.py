@@ -50,3 +50,7 @@ class SPECIFICcondition(condition):
 #if a certain number of courses need to be taken for example 12 units first year courses...
 class NUMEROUScondition(condition):
     pass
+#pass in whatever is required such as 102 of any
+#or level 1
+#or specific
+#then use instance checking to handle
