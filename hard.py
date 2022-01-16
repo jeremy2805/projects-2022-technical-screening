@@ -39,7 +39,6 @@ def is_unlocked(courses_list, target_course):
         return True
     #might use a tree for calculating things, go thru recursive search since it is useful to do that
     #for the AND / OR
-    course_completed = create_hashmap(courses_list)
     #note start the tree off with an AND condition that will be the head and it will only be the one condition
     #that is the beginning of the AND/OR tree
     #WILL LOOK LIKE THIS 
@@ -49,22 +48,15 @@ def is_unlocked(courses_list, target_course):
     # EXAMPLE (OR) 
     #         /  \
     #        152  251
+    course_completed = create_hashmap(courses_list)
     tree = ANDcondition(create_tree(CONDITIONS[target_course]))
-    return recursive_search(tree, course_completed)
+    return tree.conditionPassed(course_completed)
 #will be all lowercase
 def create_hashmap(courses_list):
     dic = {}
     for i, course in enumerate(courses_list):
         dic[course.lower()] = i
     return dic
-
-#goes through each condition of "the tree", and recursively go through them
-#note, recurse when there is a new () since it is a new group
-def recursive_search(conditions_tree, courses_completed):
-    #conditions passed through
-    pass
-    
-    #seperate by word Or/And
 
 def create_tree(conditions: str) -> condition:
     #will be a tree such as COMP1511 OR COMP2521 OR ETC...
@@ -76,25 +68,44 @@ def create_tree(conditions: str) -> condition:
     conditionList = conditions.split()
     #EXAMPLE: comp1511,or,comp2521,or,comp31
     #now must check if is an AND or an OR
-    openBrackets = 0
-    closedBrackets = 0
+    bracketDiff = 0
     #first step, find the first word ie and/or and it will tell you if it is AND or OR condition in first nest
     conditions_created = []
-    for word in conditionList:
+    i = 0
+    while i < len(conditionList):
         #means it is the start of a recursive statement
         #could use regex instead to just grab the string (PROB BETTER BET)
         #but how to handle if bracket in bracket?
-        if "(" in word:
-            openBrackets += 1
-            #start from this moment and loop through again to see where it ends
-            #then remove it from the string
-            #etc..
-            #do logic later as it is tough
-            pass
+        if "(" in conditionList[i]:
+            #since we know that a bracket will have at least one condition ie. () will never happen 
+            #I mean I cant say for certain so just in case
+            bracketDiff = bracketDiff + conditionList[i].count("(") - conditionList[i].count(")")
+            #now we begin searching from in here
+            j = i + 1
+            while bracketDiff != 0:
+                #while we are still searching
+                bracketDiff = bracketDiff + conditionList[j].count("(") - conditionList[j].count(")")
+                j += 1
+                #NOTE: since we know this is valid input there must be an eqal amount of "(" and ")"
+                #so it will eventually end
+            #now that we have taken the brackets
+            #take brackets off the end of the string and keep going
+            #excluding j since j has moved on since bracketDiff has become 0
+            newCondList = conditionList[i:j]
+            newCondList[0] = newCondList[0][1:]
+            newCondList[j - i - 1] = newCondList[j - i - 1][:-1]
+            #remove from the string that isnt condition list since it is what matters
+            recursiveConds = ' '.join(newCondList)
+            conditions.replace(recursiveConds, '')
+            #remove from conditions string
+            #now do same tree structure
+            conditions_created.append(create_tree(recursiveConds))
+            i = j
+            
     #we now know that there are no substrings containing '(' or ')'
     #thus must be final condition
     #add the list of conditions created so far to this
-    
+    conditionList = conditions.split()
     #add to list of conditions created
     for word in conditionList:
         #check each word to see if it is AND / OR
