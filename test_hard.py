@@ -36,4 +36,4 @@ def test_cross_discipline():
     assert is_unlocked(["COMP1911", "MTRN2500"], "COMP2121") == True
     assert is_unlocked(["COMP1521"], "COMP2121") == True
 
-print(is_unlocked(["COMP1521, COMP2521"], "COMP3151"))
+print(is_unlocked(["ELEC2141"], "COMP3211"))

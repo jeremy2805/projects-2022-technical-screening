@@ -43,7 +43,6 @@ class SPECIFICcondition(condition):
         self.name = courseName
     def conditionPassed(self, courses_completed: dict) -> bool:
         if courses_completed.get(self.name) is not None:
-            #the course has been taken
             return True
         else:
             return False

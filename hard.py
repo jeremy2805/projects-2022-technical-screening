@@ -110,16 +110,22 @@ def create_tree(conditions: str) -> condition:
     #add the list of conditions created so far to this
     conditionList = conditions.split()
     #add to list of conditions created
+    
+    #make a default value to head just in case there is one or zero argument
+    head = ORcondition([])
     for word in conditionList:
         #check each word to see if it is AND / OR
         if word == "or":
+            print("Making an OR condition with the conditions below:")
             head = ORcondition([])
             break
         elif word == "and":
             head = ANDcondition([])
+            print("Making AND condition with the conditions below:")
             break
     #now that we have created the head we can go in and make a new condition and add to head
     head.addConditions(conditions_created)
+    print(conditions_created)
     #added the conditions that have been made so far (ones made thru recursion)
     #now add all the ones from the word list
     #TODO: check for condition which is x amount of units done
