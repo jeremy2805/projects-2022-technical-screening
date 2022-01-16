@@ -49,7 +49,7 @@ def is_unlocked(courses_list, target_course):
     #         /  \
     #        152  251
     course_completed = create_hashmap(courses_list)
-    tree = ANDcondition(create_tree(CONDITIONS[target_course]))
+    tree = ANDcondition([create_tree(CONDITIONS[target_course])])
     return tree.conditionPassed(course_completed)
 #will be all lowercase
 def create_hashmap(courses_list):
@@ -101,6 +101,8 @@ def create_tree(conditions: str) -> condition:
             #now do same tree structure
             conditions_created.append(create_tree(recursiveConds))
             i = j
+        else:
+            i += 1
             
     #we now know that there are no substrings containing '(' or ')'
     #thus must be final condition
@@ -123,29 +125,17 @@ def create_tree(conditions: str) -> condition:
     #TODO: check for condition which is x amount of units done
     for word in conditionList:
         #is a comp condition
-        val = re.compile(r'[a-z]?{4,4}[\d]{4,4}').match(word)
+        val = re.compile(r'[a-z]?[a-z]?[a-z]?[a-z]?[\d][\d][\d][\d]').match(word)
         if val is not None:
-            #no need to format
-            if "comp" in val:
+            val = val.group()
+            #no need to format since it has prefix infront of it
+            if  len(val) > 4:
                 head.addCondition(SPECIFICcondition(word))
             else:
                 #need to add comp to front
                 head.addCondition(SPECIFICcondition("comp" + val))
-        #add the other requirement of NUMEROUScondition later
+        #TODO add the other requirement of NUMEROUScondition later
             
-    
-    #then rope all the words that are not in brackets and put them in the or condition
-    #NOTE count the amount of open and unopened brackets to determine when the brackets stop and start
-    #then delete all the words, bar the ones that existed while /(/ != /)/
-    
-    #then delete the first openBracket and the last closedBracket
-    
-    #repeat the steps using a recursion 
-    
-    #return the head of the condition tree
     return head
-    #NOTE: THINK ABOUT CASE IF THERE ARE 2 () () IN THE BEGINNING CONDITIONS STATEMENT
-    
-#TODO: create a condition tree based on what has been inputted and then use that in recursive search
 
     

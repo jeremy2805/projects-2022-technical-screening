@@ -35,3 +35,5 @@ def test_annoying_uoc():
 def test_cross_discipline():
     assert is_unlocked(["COMP1911", "MTRN2500"], "COMP2121") == True
     assert is_unlocked(["COMP1521"], "COMP2121") == True
+
+print(is_unlocked(["DPST1091"], "COMP1521"))

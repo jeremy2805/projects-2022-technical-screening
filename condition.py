@@ -10,6 +10,8 @@ class ORcondition(condition):
         self.conditions = conditions
     def addCondition(self, condition: condition):
         self.conditions.append(condition)
+    def addConditions(self, conditions: "list[condition]"):
+        self.conditions.extend(conditions)
     def conditionPassed(self, courses_completed: dict) -> bool:
         for condition in self.conditions:
             if condition.conditionPassed(courses_completed):
@@ -40,7 +42,7 @@ class SPECIFICcondition(condition):
         super().__init__()
         self.name = courseName
     def conditionPassed(self, courses_completed: dict) -> bool:
-        if courses_completed[self.name] is not None:
+        if courses_completed.get(self.name) is not None:
             #the course has been taken
             return True
         else:
