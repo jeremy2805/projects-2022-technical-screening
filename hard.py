@@ -92,12 +92,13 @@ def create_tree(conditions: str) -> condition:
             #take brackets off the end of the string and keep going
             #excluding j since j has moved on since bracketDiff has become 0
             newCondList = conditionList[i:j]
-            newCondList[0] = newCondList[0][1:]
-            newCondList[j - i - 1] = newCondList[j - i - 1][:-1]
             #remove from the string that isnt condition list since it is what matters
             recursiveConds = ' '.join(newCondList)
-            conditions.replace(recursiveConds, '')
+            conditions = conditions.replace(recursiveConds, '')
             #remove from conditions string
+            #remove the brackets now
+            recursiveConds = recursiveConds[1:]
+            recursiveConds = recursiveConds[:-1]
             #now do same tree structure
             conditions_created.append(create_tree(recursiveConds))
             i = j
@@ -121,16 +122,18 @@ def create_tree(conditions: str) -> condition:
     head.addConditions(conditions_created)
     #added the conditions that have been made so far (ones made thru recursion)
     #now add all the ones from the word list
-    
     #TODO: check for condition which is x amount of units done
     for word in conditionList:
         #is a comp condition
-        val = re.compile(r'[a-z]?[a-z]?[a-z]?[a-z]?[\d][\d][\d][\d]').match(word)
+        #not good at regex....
+        #wildcard at end because sometimes there is a .
+        val = re.compile(r'[a-z]?[a-z]?[a-z]?[a-z]?[\d][\d][\d][\d]*').match(word)
         if val is not None:
             val = val.group()
+            print(val)
             #no need to format since it has prefix infront of it
             if  len(val) > 4:
-                head.addCondition(SPECIFICcondition(word))
+                head.addCondition(SPECIFICcondition(val))
             else:
                 #need to add comp to front
                 head.addCondition(SPECIFICcondition("comp" + val))
