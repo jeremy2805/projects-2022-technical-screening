@@ -49,7 +49,25 @@ class SPECIFICcondition(condition):
 
 #if a certain number of courses need to be taken for example 12 units first year courses...
 class NUMEROUScondition(condition):
-    pass
+    def __init__(self, conditionString: list) -> None:
+        super().__init__()
+        #do stuff in init to make this all work
+        print(f"Condition String is {conditionString}")
+        if "in" in conditionString:
+            #could be like in level 3 COMP
+            #or could be in (COMP2521,...)
+            pass
+        else:
+            #not in, so just all courses
+            self.cond = 0
+        self.numCourses = conditionString[0] / 6
+    def conditionPassed(self, courses_completed: dict) -> bool:
+        if self.cond == 0:
+            #then will match anything
+            pass
+        elif isinstance(self.numCourses, int):
+            #determines level of course
+        
 #pass in whatever is required such as 102 of any
 #or level 1
 #or specific

@@ -145,18 +145,20 @@ def create_tree(conditions: str) -> condition:
             if  "comp" in val:
                 head.addCondition(SPECIFICcondition(val))
                         #is just a number, make sure not last word so can index next
-            elif val.isdecimal() and i + 1 < length and conditionList[i + 1] == "unit":
+            elif val.isdecimal() and i + 1 < length and conditionList[i + 1] == "units":
                 #grab all the word which make sense and then do stuff
                 #make sure to check for level 1 or level 2, if not found
                 #default to all courses
-                pass
-                #use j to iterate then go on to i again
+                words = []
+                while i < length and (conditionList[i] != "or" or conditionList[i] != "and"):
+                    words.append(conditionList[i])
+                    i += 1
+                #now create condition based on the condition
+                head.addCondition(NUMEROUScondition(words))
+                continue
             else:
                 #need to add comp to front
                 head.addCondition(SPECIFICcondition("comp" + val))
-        #TODO add the other requirement of NUMEROUScondition later
-        #match number to see if 
-        #then grab all the words possible
         i += 1
                
     return head
